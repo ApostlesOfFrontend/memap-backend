@@ -1,0 +1,24 @@
+name: memap-backend
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: memap-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=memap
+      - POSTGRES_PASSWORD=memap
+      - POSTGRES_DB=memap
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
