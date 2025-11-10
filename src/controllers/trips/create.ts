@@ -1,12 +1,15 @@
+// src/controllers/trip/create.ts
 import type { Context } from "hono";
 import { db } from "../../db/index";
 import { point, trip } from "../../db/schemas/trip";
+import { AuthContext } from "../../types/auth-context";
+import { validateBody } from "../../lib/valudate-body";
+import { createTripSchema } from "./schemas/create";
 
-export const createTrip = async (c: Context): Promise<Response> => {
-  const body = await c.req.json();
-  console.log("body", body);
+export const createTrip = async (c: AuthContext): Promise<Response> => {
+  const body = validateBody(createTripSchema, await c.req.json());
+
   const user = c.get("user");
-  console.log("user", user);
 
   await db.transaction(async (tx) => {
     const [created] = await tx
@@ -22,15 +25,15 @@ export const createTrip = async (c: Context): Promise<Response> => {
 
     if (!created) throw Error("Error while creating trip.");
 
-    const preparedInsert = body.route.map((poi) => ({
-      tripId: created.id,
-      name: poi.name,
-      lat: poi.location[0],
-      lng: poi.location[1],
-      createdBy: user.id,
-    }));
-    await tx.insert(point).values(preparedInsert);
+    await tx.insert(point).values(
+      body.route.map((poi) => ({
+        tripId: created.id,
+        name: poi.name,
+        lat: poi.location[1],
+        lng: poi.location[0],
+      }))
+    );
   });
 
-  return c.json({ msg: "Trip created successfuly" }, 200);
+  return c.json({ msg: "Trip created successfully" }, 200);
 };

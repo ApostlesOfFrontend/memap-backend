@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   integer,
   numeric,
@@ -31,9 +31,21 @@ export const point = pgTable("point", {
     .notNull()
     .references(() => trip.id, { onDelete: "cascade" }),
   name: text(),
-  lat: numeric({ precision: 10 }).notNull(),
-  lng: numeric({ precision: 10 }).notNull(),
-  createdBy: text()
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+  lat: numeric({ precision: 10, scale: 7, mode: "number" }).notNull(),
+  lng: numeric({ precision: 10, scale: 7, mode: "number" }).notNull(),
 });
+
+export const tripRelations = relations(trip, ({ many, one }) => ({
+  points: many(point),
+  creator: one(user, {
+    fields: [trip.createdBy],
+    references: [user.id],
+  }),
+}));
+
+export const pointRelations = relations(point, ({ one }) => ({
+  trip: one(trip, {
+    fields: [point.tripId],
+    references: [trip.id],
+  }),
+}));

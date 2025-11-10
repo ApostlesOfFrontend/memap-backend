@@ -1,12 +1,14 @@
+// src/middleware/withAuth.Middleware.ts
 import type { Context, Next } from "hono";
 import { auth } from "../lib/auth";
 import { HTTPException } from "hono/http-exception";
+import { OptionalAuthVariables } from "../types/auth-context";
 
-export const withAuthMiddleware = async (c: Context, next: Next) => {
-  console.log(c.req.raw.headers);
+export const withAuthMiddleware = async (
+  c: Context<{ Variables: OptionalAuthVariables }>,
+  next: Next
+) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
-
-  console.log(session);
 
   if (!session) {
     c.set("user", null);
