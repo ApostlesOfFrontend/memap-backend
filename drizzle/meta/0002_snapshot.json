@@ -1,6 +1,6 @@
 {
-  "id": "d5ef3d9c-c9b8-4d3b-b5e2-053097358d13",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "6be15fb4-c47d-4e78-8742-56ca99b20333",
+  "prevId": "56c36872-9a69-4898-b52a-c772e75dcb7b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -335,19 +335,13 @@
         },
         "lat": {
           "name": "lat",
-          "type": "numeric(10)",
+          "type": "numeric(10, 7)",
           "primaryKey": false,
           "notNull": true
         },
         "lng": {
           "name": "lng",
-          "type": "numeric(10)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "text",
+          "type": "numeric(10, 7)",
           "primaryKey": false,
           "notNull": true
         }
@@ -360,19 +354,6 @@
           "tableTo": "trip",
           "columnsFrom": [
             "tripId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "point_createdBy_user_id_fk": {
-          "name": "point_createdBy_user_id_fk",
-          "tableFrom": "point",
-          "tableTo": "user",
-          "columnsFrom": [
-            "createdBy"
           ],
           "columnsTo": [
             "id"
