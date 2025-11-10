@@ -1,4 +1,3 @@
-// src/controllers/trip/create.ts
 import type { Context } from "hono";
 import { db } from "../../db/index";
 import { point, trip } from "../../db/schemas/trip";

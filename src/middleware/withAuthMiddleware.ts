@@ -1,4 +1,3 @@
-// src/middleware/withAuth.Middleware.ts
 import type { Context, Next } from "hono";
 import { auth } from "../lib/auth";
 import { HTTPException } from "hono/http-exception";

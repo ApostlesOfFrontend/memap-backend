@@ -1,4 +1,3 @@
-// src/routes/trip.ts
 import { Hono } from "hono";
 import { createTrip } from "../controllers/trips/create";
 import { withAuthMiddleware } from "../middleware/withAuthMiddleware";
