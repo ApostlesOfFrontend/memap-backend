@@ -1,7 +1,9 @@
 import { db } from "../../db";
-import { point, trip } from "../../db/schemas/trip";
+import { trip } from "../../db/schemas/trip";
 import { AuthContext } from "../../types/auth-context";
-import { eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
+import { isNumber } from "../../util/is-number";
+import { HTTPException } from "hono/http-exception";
 
 export const getTripList = async (c: AuthContext): Promise<Response> => {
   const user = c.get("user");
@@ -17,4 +19,23 @@ export const getTripList = async (c: AuthContext): Promise<Response> => {
   });
 
   return c.json(data, 200);
+};
+
+export const getTripById = async (c: AuthContext): Promise<Response> => {
+  const user = c.get("user");
+  const tripId = c.req.param("tripId");
+
+  if (!isNumber(tripId))
+    throw new HTTPException(403, { message: "Invalid trip id" });
+
+  const { createdBy, ...rest } = getTableColumns(trip);
+
+  const tripData = await db
+    .select({ ...rest })
+    .from(trip)
+    .where(and(eq(trip.id, parseInt(tripId)), eq(trip.createdBy, user.id)));
+
+  if (!tripData[0]) throw new HTTPException(404, { message: "Not found" });
+
+  return c.json(tripData[0]);
 };
