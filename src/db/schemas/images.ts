@@ -6,7 +6,7 @@ export const statusesEnum = pgEnum("statuses", [
   "pending_upload",
   "upload_confirmed",
   "awaiting_processing",
-  "pricessing_started",
+  "processing_started",
   "processing_error",
   "processing_finised",
 ]);

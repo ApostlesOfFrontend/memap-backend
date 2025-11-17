@@ -18,7 +18,7 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
   await uploadUserQuota(user.id, body.tripId);
 
   const imageUuid = v4();
-  const s3Key = `originals/${user.id}/${imageUuid}`;
+  const s3Key = `originals/${user.id}/${body.tripId}/${imageUuid}`;
 
   const signedUrl = await getSignedUrl(
     S3,

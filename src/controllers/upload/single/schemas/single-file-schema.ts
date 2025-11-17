@@ -7,3 +7,8 @@ export const singleFileSchema = z.object({
   type: z.enum(["image/png", "image/jpeg"]),
   tripId: z.number().nonnegative(),
 });
+
+export const completeUploadSchema = z.object({
+  tripId: z.number().nonnegative(),
+  imageUuid: z.uuidv4().nonempty(),
+});
