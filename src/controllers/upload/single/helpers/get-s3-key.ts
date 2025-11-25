@@ -4,14 +4,14 @@ export const getOriginalsS3Key = (
   imageUuid: string
 ) => `originals/${userId}/${tripId}/${imageUuid}`;
 
-export const getCompressedS3Key = (
+export const getFullResS3Key = (
   userId: string,
   tripId: number,
   imageUuid: string
-) => `images/${userId}/${tripId}/${imageUuid}-compressed`;
+) => `images/full/${userId}/${tripId}/${imageUuid}`;
 
 export const getThumbnailS3Key = (
   userId: string,
   tripId: number,
   imageUuid: string
-) => `images/${userId}/${tripId}/${imageUuid}-thumbnail`;
+) => `images/thumbnail/${userId}/${tripId}/${imageUuid}`;

@@ -4,6 +4,7 @@ import { AuthContext } from "../../types/auth-context";
 import { and, eq, getTableColumns } from "drizzle-orm";
 import { isNumber } from "../../util/is-number";
 import { HTTPException } from "hono/http-exception";
+import { image } from "../../db/schemas/images";
 
 export const getTripList = async (c: AuthContext): Promise<Response> => {
   const user = c.get("user");
@@ -30,12 +31,22 @@ export const getTripById = async (c: AuthContext): Promise<Response> => {
 
   const { createdBy, ...rest } = getTableColumns(trip);
 
-  const tripData = await db
+  const [tripData] = await db
     .select({ ...rest })
     .from(trip)
     .where(and(eq(trip.id, parseInt(tripId)), eq(trip.createdBy, user.id)));
 
-  if (!tripData[0]) throw new HTTPException(404, { message: "Not found" });
+  if (!tripData) throw new HTTPException(404, { message: "Not found" });
 
-  return c.json(tripData[0]);
+  const images = await db
+    .select({ id: image.uuid, name: image.originalName })
+    .from(image)
+    .where(
+      and(
+        eq(image.tripId, parseInt(tripId)),
+        eq(image.status, "processing_finised")
+      )
+    );
+
+  return c.json({ ...tripData, images });
 };
