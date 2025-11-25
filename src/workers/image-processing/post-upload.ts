@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { ImageProcessingArgs } from "./types/job";
 import {
-  getCompressedS3Key,
+  getFullResS3Key,
   getOriginalsS3Key,
   getThumbnailS3Key,
 } from "../../controllers/upload/single/helpers/get-s3-key";
@@ -89,7 +89,7 @@ const worker = new Worker<ImageProcessingArgs>(
     await S3.send(
       new PutObjectCommand({
         Bucket: process.env.S3_BUCKET,
-        Key: getCompressedS3Key(owner, tripId, imageId),
+        Key: getFullResS3Key(owner, tripId, imageId),
         Body: compressed,
         ContentType: "image/webp",
       })
