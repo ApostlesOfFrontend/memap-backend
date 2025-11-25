@@ -22,6 +22,20 @@
       "when": 1762768614075,
       "tag": "0002_past_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1763379468114,
+      "tag": "0003_famous_wolf_cub",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763387186215,
+      "tag": "0004_dapper_tony_stark",
+      "breakpoints": true
     }
   ]
 }
