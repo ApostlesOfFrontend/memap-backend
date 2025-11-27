@@ -54,5 +54,5 @@ export const completeUpload = async (c: AuthContext): Promise<Response> => {
     .set({ status: "awaiting_processing" })
     .where(eq(image.uuid, body.imageUuid)); // already ensured user is owner
 
-  return c.json("Enqued email for processing", 201);
+  return c.json({ status: "success", uuid: img.uuid }, 201);
 };
