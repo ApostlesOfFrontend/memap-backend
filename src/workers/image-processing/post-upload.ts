@@ -36,8 +36,8 @@ const worker = new Worker<ImageProcessingArgs>(
 
     const metadata = await sharp(imageBuffer).metadata();
 
-    // Generate thumbnail (300px on the longer side)
-    const thumbnailSize = 300;
+    // Generate thumbnail (400px on the longer side)
+    const thumbnailSize = 400;
     const thumbnail = await sharp(imageBuffer)
       .resize(thumbnailSize, thumbnailSize, {
         fit: "inside",
