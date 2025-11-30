@@ -1,4 +1,11 @@
-import { integer, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { trip } from "./trip";
 import { user } from "./auth";
 
@@ -18,6 +25,7 @@ export const image = pgTable("image", {
   originalSize: integer().default(0), // real size checked during processing in queue, trustable
   type: text().notNull(),
   status: statusesEnum().notNull().default("pending_upload"),
+  isVisible: boolean().notNull().default(false),
 
   tripId: integer()
     .notNull()

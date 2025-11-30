@@ -1,7 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import { db } from "../../db";
 import { image } from "../../db/schemas/images";
-import { trip } from "../../db/schemas/trip";
 import { AuthContext } from "../../types/auth-context";
 import { and, eq } from "drizzle-orm";
 import {
@@ -21,20 +20,14 @@ export const getTripImage = async (c: AuthContext): Promise<Response> => {
   const [imgData] = await db
     .select()
     .from(image)
-    .leftJoin(trip, eq(trip.id, image.tripId))
     .where(
       and(eq(image.uuid, imageUuid), eq(image.status, "processing_finised"))
     );
   if (!imgData) throw new HTTPException(404, { message: "Image not found" });
-  if (!imgData.trip)
-    throw new HTTPException(500, {
-      message: "Invalid state, image without parent trip",
-    });
-
-  if (user.id !== imgData.trip.createdBy) throw new HTTPException(403);
+  if (user.id !== imgData.userId) throw new HTTPException(403);
 
   const getS3Key = type === "thumbnail" ? getThumbnailS3Key : getFullResS3Key;
-  const s3Key = getS3Key(user.id, imgData.trip.id, imageUuid);
+  const s3Key = getS3Key(user.id, imgData.tripId, imageUuid);
 
   const getCommand = new GetObjectCommand({
     Bucket: process.env.S3_BUCKET,

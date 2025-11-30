@@ -44,7 +44,8 @@ export const getTripById = async (c: AuthContext): Promise<Response> => {
     .where(
       and(
         eq(image.tripId, parseInt(tripId)),
-        eq(image.status, "processing_finised")
+        eq(image.status, "processing_finised"),
+        eq(image.isVisible, true)
       )
     );
 

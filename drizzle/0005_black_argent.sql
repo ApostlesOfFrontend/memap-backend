@@ -1,0 +1,1 @@
+ALTER TABLE "image" ADD COLUMN "isVisible" boolean DEFAULT false NOT NULL;
