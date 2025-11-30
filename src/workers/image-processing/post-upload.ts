@@ -101,7 +101,7 @@ const worker = new Worker<ImageProcessingArgs>(
 worker.on("completed", async (job) => {
   await db
     .update(image)
-    .set({ status: "processing_finised" })
+    .set({ status: "processing_finised", isVisible: true })
     .where(eq(image.uuid, job.data.imageId));
 });
 
