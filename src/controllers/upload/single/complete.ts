@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../../../db";
 import { image } from "../../../db/schemas/images";
-import { validateBody } from "../../../lib/valudate-body";
+import { validateBody } from "../../../lib/validate-body";
 import { AuthContext } from "../../../types/auth-context";
 import { completeUploadSchema } from "./schemas/single-file-schema";
 import { HTTPException } from "hono/http-exception";

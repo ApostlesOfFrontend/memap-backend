@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import { db } from "../../db/index";
 import { point, trip } from "../../db/schemas/trip";
 import { AuthContext } from "../../types/auth-context";
-import { validateBody } from "../../lib/valudate-body";
+import { validateBody } from "../../lib/validate-body";
 import { createTripSchema } from "./schemas/create";
 
 export const createTrip = async (c: AuthContext): Promise<Response> => {

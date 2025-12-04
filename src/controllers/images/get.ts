@@ -15,8 +15,6 @@ export const getTripImage = async (c: AuthContext): Promise<Response> => {
   const imageUuid = c.req.param("uuid");
   const { type } = c.req.query();
 
-  console.log("endpoint was hit");
-
   const [imgData] = await db
     .select()
     .from(image)

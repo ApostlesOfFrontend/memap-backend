@@ -19,7 +19,6 @@ export const uploadUserQuota = async (userId: string, tripId: number) => {
       .select({ count: count() })
       .from(image)
       .where(and(eq(image.userId, userId), eq(image.tripId, tripId)));
-    console.log({ imagesPerTrip });
 
     if (imagesPerTrip[0].count >= TRIP_TOTAL_IMG)
       throw new HTTPException(403, { message: "Quota exceeded" });

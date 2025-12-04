@@ -3,7 +3,7 @@ import { AuthContext } from "../../../types/auth-context";
 import { S3 } from "../../../lib/s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 } from "uuid";
-import { validateBody } from "../../../lib/valudate-body";
+import { validateBody } from "../../../lib/validate-body";
 import { singleFileSchema } from "./schemas/single-file-schema";
 import { uploadUserQuota } from "./helpers/upload-user-quota";
 import { db } from "../../../db";
@@ -14,7 +14,7 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
 
   const body = validateBody(singleFileSchema, await c.req.json());
 
-  // TODO: handle concurrency control - might need quota table with oprimistic locking
+  // TODO: handle concurrency control - might need quota table with optimistic locking
   await uploadUserQuota(user.id, body.tripId);
 
   const imageUuid = v4();
