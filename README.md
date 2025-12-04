@@ -179,7 +179,6 @@ The application uses BullMQ for background image processing:
      │                                                      ┌─────────────────┐
      │                                                      │   API Server    │
      │                                                      │                 │
-     │                                                      │ GET /presigned  │
      │                                                      └────────┬────────┘
      │                                                               │
      │ ◄─────────────────────────────────────────────────────────────┘
