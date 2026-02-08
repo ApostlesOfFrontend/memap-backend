@@ -22,7 +22,11 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
 
   const signedUrl = await getSignedUrl(
     S3,
-    new PutObjectCommand({ Bucket: process.env.S3_BUCKET!, Key: s3Key })
+    new PutObjectCommand({
+      Bucket: process.env.S3_BUCKET!,
+      Key: s3Key,
+      ContentType: body.type,
+    }),
   );
 
   await db.insert(image).values({
