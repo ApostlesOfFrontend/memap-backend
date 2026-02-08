@@ -23,7 +23,7 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
   const signedUrl = await getSignedUrl(
     S3,
     new PutObjectCommand({
-      Bucket: process.env.S3_BUCKET!,
+      Bucket: "",
       Key: s3Key,
       ContentType: body.type,
     }),
