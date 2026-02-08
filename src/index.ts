@@ -6,6 +6,18 @@ import { cors } from "hono/cors";
 
 const app = new Hono();
 
+app.use(
+  "*",
+  cors({
+    origin: "https://me-map.xyz",
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "DELETE", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
+
 app.on(["POST", "GET"], "/api/auth/*", (c) => {
   return auth.handler(c.req.raw);
 });
