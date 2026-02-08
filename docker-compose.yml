@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  # --- THE BUILDER ---
+  # We define the build context here.
+  # Docker is smart: it will build this once and reuse it for the others.
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my-portfolio-app:latest # Local name for the built image
+    command: node dist/index.js
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - CLOUDFLARE_API_R2_TOKEN=${CLOUDFLARE_API_R2_TOKEN}
+      - S3_CLIENT_ACCESS_KEY_ID=${S3_CLIENT_ACCESS_KEY_ID}
+      - S3_CLIENT_SECRET_ACCESS_KEY=${S3_CLIENT_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+    networks:
+      - dokploy-network
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+
+  # --- THE MIGRATOR ---
+  migrator:
+    image: my-portfolio-app:latest # Uses the image built by 'api'
+    command: npx drizzle-kit migrate
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - dokploy-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  # --- THE WORKER ---
+  worker:
+    image: my-portfolio-app:latest # Uses the image built by 'api'
+    command: node dist/worker.js
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - CLOUDFLARE_API_R2_TOKEN=${CLOUDFLARE_API_R2_TOKEN}
+      - S3_CLIENT_ACCESS_KEY_ID=${S3_CLIENT_ACCESS_KEY_ID}
+      - S3_CLIENT_SECRET_ACCESS_KEY=${S3_CLIENT_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+    networks:
+      - dokploy-network
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+
+networks:
+  dokploy-network:
+    external: true

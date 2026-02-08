@@ -3,9 +3,12 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
     "start": "node dist/index.js",
-    "worker:dev": "tsx watch src/workers/image-processing/post-upload.ts"
+    "worker:dev": "tsx watch src/workers/image-processing/post-upload.ts",
+    "build": "npm run build:api && npm run build:worker",
+    "build:api": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --external:node:* --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "build:worker": "esbuild src/workers/image-processing/post-upload.ts --bundle --platform=node --format=esm --outfile=dist/worker.js --external:node:* --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "worker": "node dist/worker.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.931.0",
@@ -25,6 +28,7 @@
     "@types/node": "^20.11.17",
     "@types/pg": "^8.15.5",
     "drizzle-kit": "^0.31.4",
+    "esbuild": "^0.27.3",
     "tsx": "^4.20.5",
     "typescript": "^5.8.3"
   }

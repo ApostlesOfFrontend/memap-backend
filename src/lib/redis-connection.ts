@@ -1,7 +1,6 @@
 import { ConnectionOptions } from "bullmq";
 
 export const connection: ConnectionOptions = {
-  host: process.env.REDIS_HOST,
-  port: parseInt(process.env.REDIS_PORT || ""),
+  url: process.env.REDIS_URL,
   maxRetriesPerRequest: 3,
 };

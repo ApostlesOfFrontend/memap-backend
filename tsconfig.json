@@ -2,11 +2,25 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "lib": ["ESNext"],
     "strict": true,
-    "lib": ["esnext"],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  }
+    "declaration": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Output Settings */
+    "outDir": "dist",
+    "rootDir": "src",
+
+    /* Path Mapping (Optional - if you use @/ prefixes) */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
