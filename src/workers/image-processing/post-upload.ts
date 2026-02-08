@@ -82,7 +82,7 @@ const worker = new Worker<ImageProcessingArgs>(
         Key: getThumbnailS3Key(owner, tripId, imageId),
         Body: thumbnail,
         ContentType: "image/webp",
-      })
+      }),
     );
 
     // Upload compressed version to S3
@@ -92,10 +92,10 @@ const worker = new Worker<ImageProcessingArgs>(
         Key: getFullResS3Key(owner, tripId, imageId),
         Body: compressed,
         ContentType: "image/webp",
-      })
+      }),
     );
   },
-  { connection: connection }
+  { connection: connection },
 );
 
 worker.on("completed", async (job) => {
@@ -108,7 +108,7 @@ worker.on("completed", async (job) => {
 worker.on("failed", async (job) => {
   if (!job) {
     console.error(
-      "Failure occurred while processing a job and job data is missing"
+      "Failure occurred while processing a job and job data is missing",
     );
     return;
   }
@@ -117,3 +117,12 @@ worker.on("failed", async (job) => {
     .set({ status: "processing_error" })
     .where(eq(image.uuid, job.data.imageId));
 });
+
+const gracefulShutdown = async (signal: string) => {
+  console.log(`Received ${signal}, closing worker...`);
+  await worker.close();
+  process.exit(0);
+};
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
