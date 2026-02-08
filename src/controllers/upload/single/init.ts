@@ -26,6 +26,7 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
       Bucket: process.env.S3_BUCKET!,
       Key: s3Key,
       ContentType: body.type,
+      ChecksumAlgorithm: undefined,
     }),
     { expiresIn: 3600 },
   );
