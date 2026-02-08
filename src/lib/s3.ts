@@ -7,5 +7,5 @@ export const S3 = new S3Client({
     accessKeyId: process.env.S3_CLIENT_ACCESS_KEY_ID!,
     secretAccessKey: process.env.S3_CLIENT_SECRET_ACCESS_KEY!,
   },
-  forcePathStyle: true,
+  forcePathStyle: false,
 });
