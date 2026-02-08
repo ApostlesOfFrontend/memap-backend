@@ -26,7 +26,7 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
       Bucket: process.env.S3_BUCKET!,
       Key: s3Key,
     }),
-    { expiresIn: 3600, signableHeaders: new Set(["host"]) },
+    { expiresIn: 3600 },
   );
 
   await db.insert(image).values({
@@ -38,5 +38,5 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
     userSize: body.size,
   });
 
-  return c.json({ signedUrl, uuid: imageUuid });
+  return c.json({ signedUrl, uuid: imageUuid, type: body.type });
 };
