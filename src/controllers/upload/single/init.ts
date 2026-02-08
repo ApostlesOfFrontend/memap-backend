@@ -25,8 +25,9 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
     new PutObjectCommand({
       Bucket: process.env.S3_BUCKET!,
       Key: s3Key,
+      ContentType: body.type,
     }),
-    { expiresIn: 3600 },
+    { expiresIn: 3600, unhoistableHeaders: new Set(["Content-Type"]) },
   );
 
   await db.insert(image).values({
