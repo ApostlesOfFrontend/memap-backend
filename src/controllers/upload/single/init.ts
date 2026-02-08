@@ -27,6 +27,7 @@ export const initializeUpload = async (c: AuthContext): Promise<Response> => {
       Key: s3Key,
       ContentType: body.type,
     }),
+    { expiresIn: 3600 },
   );
 
   await db.insert(image).values({
