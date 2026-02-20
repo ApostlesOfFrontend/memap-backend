@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { auth } from "./lib/auth";
 import { apiRouter } from "./routes/api";
 import { cors } from "hono/cors";
+import { getEnvVar } from "./util/get-env-var";
 
 const app = new Hono();
 
@@ -27,7 +28,7 @@ app.route("/", apiRouter);
 serve(
   {
     fetch: app.fetch,
-    port: 3000,
+    port: parseInt(getEnvVar("APP_PORT")),
   },
   (info) => {
     console.log(`Server is running on http://localhost:${info.port}`);
