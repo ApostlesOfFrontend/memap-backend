@@ -43,6 +43,13 @@
       "when": 1764494215182,
       "tag": "0005_black_argent",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1771608576028,
+      "tag": "0006_flowery_anita_blake",
+      "breakpoints": true
     }
   ]
 }

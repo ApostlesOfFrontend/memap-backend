@@ -11,6 +11,7 @@ services:
     image: my-portfolio-app:latest # Local name for the built image
     command: node dist/index.js
     environment:
+      - APP_PORT=${APP_PORT}
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
@@ -20,6 +21,8 @@ services:
       - S3_CLIENT_SECRET_ACCESS_KEY=${S3_CLIENT_SECRET_ACCESS_KEY}
       - S3_ENDPOINT=${S3_ENDPOINT}
       - S3_BUCKET=${S3_BUCKET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     networks:
       - dokploy-network
     depends_on:
