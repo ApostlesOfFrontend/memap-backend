@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   integer,
   numeric,
   pgTable,
@@ -16,10 +17,13 @@ export const trip = pgTable("trip", {
   dateFrom: timestamp().notNull(),
   dateTo: timestamp().notNull(),
   createdAt: timestamp().defaultNow().notNull(),
+  isVisible: boolean().notNull().default(true),
+  markedForDeletion: boolean().notNull().default(false),
+
   updatedAt: timestamp()
     .defaultNow()
     .notNull()
-    .$onUpdate(() => sql`now()`),
+    .$onUpdate(() => new Date()),
   createdBy: text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
