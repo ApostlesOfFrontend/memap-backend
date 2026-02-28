@@ -16,6 +16,7 @@ export const statusesEnum = pgEnum("statuses", [
   "processing_started",
   "processing_error",
   "processing_finised",
+  "marked_for_deletion",
 ]);
 
 export const image = pgTable("image", {

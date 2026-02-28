@@ -13,7 +13,11 @@ export const getTripList = async (c: AuthContext): Promise<Response> => {
     columns: {
       createdBy: false,
     },
-    where: eq(trip.createdBy, user.id),
+    where: and(
+      eq(trip.isVisible, true),
+      eq(trip.createdBy, user.id),
+      eq(trip.markedForDeletion, false),
+    ),
     with: {
       points: true,
     },
@@ -34,7 +38,14 @@ export const getTripById = async (c: AuthContext): Promise<Response> => {
   const [tripData] = await db
     .select({ ...rest })
     .from(trip)
-    .where(and(eq(trip.id, parseInt(tripId)), eq(trip.createdBy, user.id)));
+    .where(
+      and(
+        eq(trip.id, parseInt(tripId)),
+        eq(trip.createdBy, user.id),
+        eq(trip.isVisible, true),
+        eq(trip.markedForDeletion, false),
+      ),
+    );
 
   if (!tripData) throw new HTTPException(404, { message: "Not found" });
 
@@ -45,8 +56,8 @@ export const getTripById = async (c: AuthContext): Promise<Response> => {
       and(
         eq(image.tripId, parseInt(tripId)),
         eq(image.status, "processing_finised"),
-        eq(image.isVisible, true)
-      )
+        eq(image.isVisible, true),
+      ),
     );
 
   return c.json({ ...tripData, images });
