@@ -1,0 +1,2 @@
+ALTER TABLE "image" ADD COLUMN "pointId" integer;--> statement-breakpoint
+ALTER TABLE "image" ADD CONSTRAINT "image_pointId_point_id_fk" FOREIGN KEY ("pointId") REFERENCES "public"."point"("id") ON DELETE cascade ON UPDATE no action;
