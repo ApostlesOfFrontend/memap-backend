@@ -12,7 +12,9 @@ export const createTripSchema = z.object({
       z.object({
         name: z.string().optional().nullable(),
         location: z.tuple([z.number(), z.number()]), // IMPORTANT: z.tuple([longitude, latitude])
-      })
+        clientId: z.string(),
+        totalPhotos: z.number(),
+      }),
     )
     .nonempty(),
 });

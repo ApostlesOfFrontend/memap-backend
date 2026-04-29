@@ -1,4 +1,3 @@
-import type { Context } from "hono";
 import { db } from "../../db/index";
 import { point, trip } from "../../db/schemas/trip";
 import { AuthContext } from "../../types/auth-context";
@@ -10,8 +9,8 @@ export const createTrip = async (c: AuthContext): Promise<Response> => {
 
   const user = c.get("user");
 
-  await db.transaction(async (tx) => {
-    const [created] = await tx
+  const data = await db.transaction(async (tx) => {
+    const [createdTrip] = await tx
       .insert(trip)
       .values({
         name: body.title,
@@ -22,17 +21,41 @@ export const createTrip = async (c: AuthContext): Promise<Response> => {
       })
       .returning();
 
-    if (!created) throw Error("Error while creating trip.");
+    if (!createdTrip) throw Error("Error while creating trip.");
 
-    await tx.insert(point).values(
-      body.route.map((poi) => ({
-        tripId: created.id,
-        name: poi.name,
-        lat: poi.location[1],
-        lng: poi.location[0],
-      }))
-    );
+    const createdPoints = await tx
+      .insert(point)
+      .values(
+        body.route.map((poi) => ({
+          tripId: createdTrip.id,
+          name: poi.name,
+          lat: poi.location[1],
+          lng: poi.location[0],
+        })),
+      )
+      .returning();
+    if (!createdTrip) throw Error("Error while creating trip points.");
+
+    return { createdTrip, createdPoints };
   });
 
-  return c.json({ msg: "Trip created successfully" }, 200);
+  if (data.createdPoints.length !== body.route.length) {
+    throw Error("Trip points not created correctly.");
+  }
+
+  const toReturn = {
+    id: data.createdTrip.id,
+    name: data.createdTrip.name,
+    description: data.createdTrip.description,
+    dateFrom: data.createdTrip.dateFrom,
+    dateTo: data.createdTrip.dateTo,
+    points: data.createdPoints.map((p, idx) => ({
+      id: p.id,
+      clientId: body.route[idx].clientId,
+      name: p.name,
+      location: [p.lng, p.lat],
+    })),
+  };
+
+  return c.json(toReturn, 200);
 };

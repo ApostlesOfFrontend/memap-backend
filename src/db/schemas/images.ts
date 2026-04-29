@@ -6,7 +6,7 @@ import {
   text,
   uuid,
 } from "drizzle-orm/pg-core";
-import { trip } from "./trip";
+import { point, trip } from "./trip";
 import { user } from "./auth";
 
 export const statusesEnum = pgEnum("statuses", [
@@ -31,6 +31,7 @@ export const image = pgTable("image", {
   tripId: integer()
     .notNull()
     .references(() => trip.id, { onDelete: "cascade" }),
+  pointId: integer().references(() => point.id, { onDelete: "cascade" }),
   userId: text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
