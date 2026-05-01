@@ -35,22 +35,26 @@ export const getTripById = async (c: AuthContext): Promise<Response> => {
 
   const { createdBy, ...rest } = getTableColumns(trip);
 
-  const [tripData] = await db
-    .select({ ...rest })
-    .from(trip)
-    .where(
-      and(
-        eq(trip.id, parseInt(tripId)),
-        eq(trip.createdBy, user.id),
-        eq(trip.isVisible, true),
-        eq(trip.markedForDeletion, false),
-      ),
-    );
+  const tripData = await db.query.trip.findFirst({
+    where: and(
+      eq(trip.id, parseInt(tripId)),
+      eq(trip.createdBy, user.id),
+      eq(trip.isVisible, true),
+      eq(trip.markedForDeletion, false),
+    ),
+    with: {
+      points: true,
+    },
+  });
 
   if (!tripData) throw new HTTPException(404, { message: "Not found" });
 
   const images = await db
-    .select({ id: image.uuid, name: image.originalName })
+    .select({
+      id: image.uuid,
+      name: image.originalName,
+      pointId: image.pointId,
+    })
     .from(image)
     .where(
       and(
