@@ -97,7 +97,7 @@ export const completeBatchUpload = async (
 
   await db
     .update(image)
-    .set({ status: "awaiting_processing" })
+    .set({ status: "awaiting_processing", isVisible: true })
     .where(
       and(
         eq(image.userId, user.id),

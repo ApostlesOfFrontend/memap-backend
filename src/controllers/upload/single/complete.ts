@@ -51,7 +51,7 @@ export const completeUpload = async (c: AuthContext): Promise<Response> => {
 
   await db
     .update(image)
-    .set({ status: "awaiting_processing" })
+    .set({ status: "awaiting_processing", isVisible: true })
     .where(eq(image.uuid, body.imageUuid)); // already ensured user is owner
 
   return c.json({ status: "success", uuid: img.uuid }, 201);
