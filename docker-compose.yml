@@ -45,6 +45,9 @@ services:
   worker:
     image: my-portfolio-app:latest # Uses the image built by 'api'
     command: node dist/worker.js
+    deploy:
+      mode: replicated
+      replicas: 4
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL}
