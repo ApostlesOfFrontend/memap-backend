@@ -114,7 +114,7 @@ worker.on("failed", async (job) => {
   }
   await db
     .update(image)
-    .set({ status: "processing_error" })
+    .set({ status: "processing_error", isVisible: false })
     .where(eq(image.uuid, job.data.imageId));
 });
 

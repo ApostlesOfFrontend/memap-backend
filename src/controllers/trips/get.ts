@@ -1,7 +1,7 @@
 import { db } from "../../db";
 import { trip } from "../../db/schemas/trip";
 import { AuthContext } from "../../types/auth-context";
-import { and, eq, getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns, or } from "drizzle-orm";
 import { isNumber } from "../../util/is-number";
 import { HTTPException } from "hono/http-exception";
 import { image } from "../../db/schemas/images";
@@ -54,12 +54,17 @@ export const getTripById = async (c: AuthContext): Promise<Response> => {
       id: image.uuid,
       name: image.originalName,
       pointId: image.pointId,
+      status: image.status,
     })
     .from(image)
     .where(
       and(
         eq(image.tripId, parseInt(tripId)),
-        eq(image.status, "processing_finised"),
+        or(
+          eq(image.status, "processing_finised"),
+          eq(image.status, "awaiting_processing"),
+          eq(image.status, "processing_started"),
+        ),
         eq(image.isVisible, true),
       ),
     );
